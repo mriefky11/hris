@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{asset('mazer/assets/compiled/css/app.css')}}">
     <link rel="stylesheet" href="{{asset('mazer/assets/compiled/css/app-dark.css')}}">
     <link rel="stylesheet" href="{{asset('mazer/assets/compiled/css/iconly.css')}}">
+    <link rel="stylesheet" href="{{ asset('mazer/assets/extensions/simple-datatables/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('mazer/assets/extensions/tables-datatables.css') }}">
 </head>
 
 <body>
@@ -20,17 +22,6 @@
         </div>
         <div id="main">
             @yield('content')
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2023 &copy; Mazer</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                            by <a href="https://saugi.me">Saugi</a></p>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
     <script src="{{asset('mazer/assets/static/js/components/dark.js')}}"></script>
@@ -39,6 +30,9 @@
     <!-- Need: Apexcharts -->
     <script src="{{asset('mazer/assets/extensions/apexcharts/apexcharts.min.js')}}"></script>
     <script src="{{asset('mazer/assets/static/js/pages/dashboard.js')}}"></script>
+    <!-- Need: handle datatables -->
+    <script src="{{asset('mazer/assets/extensions/simple-datatables/umd/simple-datatables.js')}}"></script>
+    <script src="{{asset('mazer/assets/static/js/pages/simple-datatables.js')}}"></script>
 </body>
 
 </html>
