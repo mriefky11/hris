@@ -20,6 +20,19 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'employee_id' => '1'
         ]);
+
+        $this->call(
+            [
+                departments::class,
+                roles::class,
+                employees::class,
+                attendances::class,
+                tasks::class,
+                payroll::class,
+                leaves::class
+            ]
+        );
     }
 }
