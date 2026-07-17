@@ -28,8 +28,15 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex ">
-                    <a href="" class="btn btn-primary ms-auto mb-3">New Task</a>
+                    <a href="{{route('tasks.create')}}" class="btn btn-primary ms-auto mb-3">New Task</a>
                 </div>
+
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
 
                 <table class="table table-striped" id="table1">
                     <thead>
