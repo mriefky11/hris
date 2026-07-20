@@ -25,4 +25,19 @@ class TaskService
 
         return $this->taskRepository->create($data);
     }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(StoreRequest $request, $id)
+    {
+        //
+    }
+
+    public function delete($id)
+    {
+        //
+    }
 }

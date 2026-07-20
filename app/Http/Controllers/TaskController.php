@@ -36,4 +36,19 @@ class TaskController extends Controller
         $this->taskService->create($request);
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
+
+    public function edit($id)
+    {
+        // 
+    }
+
+    public function update(StoreRequest $request, $id)
+    {
+        // 
+    }
+
+    public function destroy($id)
+    {
+        // 
+    }
 }
