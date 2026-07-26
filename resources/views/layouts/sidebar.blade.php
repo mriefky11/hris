@@ -68,8 +68,8 @@
                 </a>
             </li>
             <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
+                class="sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                <a href="{{ route('roles.index') }}" class='sidebar-link'>
                     <i class="bi bi-tag"></i>
                     <span>Roles</span>
                 </a>
