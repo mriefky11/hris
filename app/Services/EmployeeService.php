@@ -17,4 +17,9 @@ class EmployeeService
     {
         return $this->employeeRepository->all();
     }
+
+    public function create(array $data)
+    {
+        return $this->employeeRepository->create($data);
+    }
 }

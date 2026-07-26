@@ -54,8 +54,8 @@
                 </a>
             </li>
             <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
+                class="sidebar-item {{ request()->routeIs('employees.*') ? 'active' : '' }}">
+                <a href="{{ route('employees.index') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Employee</span>
                 </a>

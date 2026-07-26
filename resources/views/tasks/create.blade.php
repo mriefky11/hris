@@ -19,8 +19,8 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="">Tasks</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('tasks.index') }}">Tasks</a></li>
                         <li class="breadcrumb-item">Create</li>
                     </ol>
                 </nav>
@@ -30,6 +30,17 @@
     <section class="section">
         <div class="card">
             <div class="card-body">
+                @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Whoops! Something went wrong.</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <form action="{{ isset($task) ? route('tasks.update', $task->id) : route('tasks.store') }}" method="POST">
                     @csrf
                     @if(isset($task))
@@ -38,7 +49,7 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="title" class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" id="title" placeholder="Enter task title" value="{{ old('title', $task->title ?? '') }}" required>
+                            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" id="title" placeholder="Enter task title" value="{{ old('title', $task->title ?? '') }}">
                             @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -50,8 +61,7 @@
                                 class="form-control @error('due_date') is-invalid @enderror"
                                 id="due_date"
                                 name="due_date"
-                                value="{{ old('due_date', isset($task) ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d\TH:i') : '') }}"
-                                required>
+                                value="{{ old('due_date', isset($task) ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d\TH:i') : '') }}">
                             @error('due_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -60,7 +70,7 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="assigned_to" class="form-label">Assigned To</label>
-                            <select class="form-select @error('assigned_to') is-invalid @enderror" name="assigned_to" required>
+                            <select class="form-select @error('assigned_to') is-invalid @enderror" name="assigned_to">
                                 <option value="">Select an Employee</option>
                                 @foreach($employees as $employee)
                                 <option value="{{ $employee->id }}"
@@ -75,7 +85,7 @@
                         </div>
                         <div class="col-6">
                             <label for="status" class="form-label">Status</label>
-                            <select class="form-select @error('status') is-invalid @enderror" name="status" required>
+                            <select class="form-select @error('status') is-invalid @enderror" name="status">
                                 <option value="">Select an Status</option>
                                 <option value="todo" {{ old('status', $task->status ?? '') == 'todo' ? 'selected' : '' }}>Todo</option>
                                 <option value="done" {{ old('status', $task->status ?? '') == 'done' ? 'selected' : '' }}>Done</option>

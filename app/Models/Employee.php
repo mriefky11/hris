@@ -29,4 +29,14 @@ class Employee extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

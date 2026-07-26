@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
@@ -14,6 +15,8 @@ Route::resource('/tasks', TaskController::class);
 
 Route::patch('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
     ->name('tasks.updateStatus');
+
+Route::resource('/employees', EmployeeController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

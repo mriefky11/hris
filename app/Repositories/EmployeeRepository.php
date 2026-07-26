@@ -10,4 +10,9 @@ class EmployeeRepository
     {
         return Employee::all();
     }
+
+    public function create(array $data)
+    {
+        return Employee::create($data);
+    }
 }
