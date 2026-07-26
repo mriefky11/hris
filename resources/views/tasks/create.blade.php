@@ -21,7 +21,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('tasks.index') }}">Tasks</a></li>
-                        <li class="breadcrumb-item">Create</li>
+                        <li class="breadcrumb-item"> {{ isset($task) ? 'Update' : 'Create' }}</li>
                     </ol>
                 </nav>
             </div>
