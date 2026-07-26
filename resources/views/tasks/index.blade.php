@@ -55,19 +55,39 @@
                             <td>{{$task->employee->fullname}}</td>
                             <td>{{$task->due_date_formatted }}</td>
                             <td>
-                                @if ($task->status == 'done')
-                                <span class="badge bg-success">{{$task->status}}</span>
-                                @elseif ($task->status == 'pending')
-                                <span class="badge bg-warning">{{$task->status}}</span>
-                                @elseif ($task->status == 'in-progress')
-                                <span class="badge bg-info">{{$task->status}}</span>
-                                @else
-                                <span class="badge bg-secondary">{{$task->status}}</span>
-                                @endif
+                                <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <select
+                                        name="status"
+                                        onchange="this.form.submit()"
+                                        class="form-select form-select-sm border-0 text-white fw-bold
+                                            @if ($task->status == 'done') bg-success
+                                            @elseif ($task->status == 'pending') bg-warning text-dark
+                                            @elseif ($task->status == 'in-progress') bg-info
+                                            @else bg-secondary
+                                            @endif
+                                            "
+                                        style="width:auto; cursor:pointer;">
+                                        <option value="todo" {{ $task->status == 'todo' ? 'selected' : '' }}>Todo</option>
+                                        <option value="pending" {{ $task->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="in-progress" {{ $task->status == 'in-progress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
+                                    </select>
+                                </form>
                             </td>
                             <td class="d-flex gap-2">
-                                <a href="" class="btn btn-primary btn-sm">View</a><a href="" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-primary btn-sm">View</a>
+                                <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <button
+                                    class="btn btn-danger btn-sm btn-delete"
+                                    data-id="{{ $task->id }}"
+                                    data-title="{{ $task->title }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                         @endforeach()
@@ -77,6 +97,65 @@
         </div>
 
     </section>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" id="deleteForm">
+                @csrf
+                @method('DELETE')
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Task</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure want to delete <strong id="taskTitle"></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function() {
+                let id = this.dataset.id;
+                let title = this.dataset.title;
+
+                let form = document.getElementById('deleteForm');
+                form.action = `/tasks/${id}`;
+
+                document.getElementById('taskTitle').innerText = title;
+            });
+        });
+    });
+
+    document.querySelectorAll('.status-badge').forEach(badge => {
+        badge.addEventListener('click', function() {
+
+            let form = this.closest('form');
+            let input = form.querySelector('.status-input');
+
+            let current = input.value;
+
+            let nextStatus = {
+                'todo': 'pending',
+                'pending': 'in-progress',
+                'in-progress': 'done',
+                'done': 'todo'
+            };
+
+            input.value = nextStatus[current];
+
+            form.submit();
+        });
+    });
+</script>
 
 @endsection

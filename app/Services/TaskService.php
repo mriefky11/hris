@@ -19,25 +19,36 @@ class TaskService
         return $this->taskRepository->all();
     }
 
-    public function create(StoreRequest $request)
+    public function findById($id)
     {
-        $data = $request->validated();
+        return $this->taskRepository->findOrFail($id);
+    }
 
+    public function create(array $data)
+    {
         return $this->taskRepository->create($data);
     }
 
-    public function edit($id)
+    public function update(array $data, $id)
     {
-        //
+        $task = $this->taskRepository->findOrFail($id);
+
+        return $this->taskRepository->update($task, $data);
     }
 
-    public function update(StoreRequest $request, $id)
+    public function destroy($id)
     {
-        //
+        $task = $this->taskRepository->findOrFail($id);
+
+        return $this->taskRepository->delete($task);
     }
 
-    public function delete($id)
+    public function updateStatus($id, $status)
     {
-        //
+        $task = $this->taskRepository->findOrFail($id);
+
+        return $this->taskRepository->updateStatus($id, [
+            'status' => $status
+        ]);
     }
 }

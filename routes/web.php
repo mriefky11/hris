@@ -12,6 +12,9 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('/tasks', TaskController::class);
 
+Route::patch('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
+    ->name('tasks.updateStatus');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
