@@ -12,6 +12,11 @@ class Employee extends Model
 
     protected $table = 'employees';
 
+    protected $casts = [
+        'birth_date' => 'date',
+        'hire_date' => 'date',
+    ];
+
     protected $fillable = [
         'fullname',
         'email',

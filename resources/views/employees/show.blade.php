@@ -4,8 +4,21 @@
 <div class="page-heading">
 
     <div class="page-title mb-3">
-        <h3>Task Detail</h3>
-        <p class="text-muted">Detailed information about the task.</p>
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Employee Detail</h3>
+                <p class="text-muted">Detailed information about the employee.</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('employees.index') }}">Employee</a></li>
+                        <li class="breadcrumb-item">Detail</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 
     <section class="section">
@@ -14,18 +27,12 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h4 class="mb-1">{{ $task->title }}</h4>
-                        <small class="text-muted">Task ID: #{{ $task->id }}</small>
+                        <h4 class="mb-1">{{ $employee->fullname }}</h4>
+                        <small class="text-muted">Employee ID: #{{ $employee->id }}</small>
                     </div>
 
-                    <span class="badge 
-                        @if ($task->status == 'done') bg-success
-                        @elseif ($task->status == 'pending') bg-warning text-dark
-                        @elseif ($task->status == 'in-progress') bg-info
-                        @else bg-secondary
-                        @endif
-                    ">
-                        {{ strtoupper($task->status) }}
+                    <span class="badge {{ $employee->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                        {{ strtoupper($employee->status) }}
                     </span>
                 </div>
 
@@ -33,20 +40,43 @@
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
-                        <label class="text-muted">Assigned To</label>
-                        <p class="fw-bold">{{ $task->employee->fullname }}</p>
+                        <label class="text-muted">Birth Date</label>
+                        <p class="fw-bold">{{ $employee->birth_date }}</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="text-muted">Due Date</label>
-                        <p class="fw-bold">{{ $task->due_date_formatted }}</p>
+                        <label class="text-muted">Email</label>
+                        <p class="fw-bold">{{ $employee->email }}</p>
                     </div>
 
-                    <div class="col-md-12 mb-3">
-                        <label class="text-muted">Description</label>
-                        <p class="fw-bold">
-                            {{ $task->description ?? 'No description provided.' }}
-                        </p>
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Phone Number</label>
+                        <p class="fw-bold">{{ $employee->phone_number }}</p>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Address</label>
+                        <p class="fw-bold">{{ $employee->address }}</p>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Department</label>
+                        <p class="fw-bold">{{ $employee->department->name }}</p>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Role</label>
+                        <p class="fw-bold">{{ $employee->role->title }}</p>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Status</label>
+                        <p class="fw-bold">{{ $employee->status }}</p>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted">Salary</label>
+                        <p class="fw-bold">{{ $employee->salary }}</p>
                     </div>
 
                 </div>
@@ -54,12 +84,12 @@
                 <hr>
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('tasks.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('employees.index') }}" class="btn btn-secondary">
                         Back
                     </a>
 
                     <div class="d-flex gap-2">
-                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">
+                        <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-warning">
                             Edit
                         </a>
                     </div>

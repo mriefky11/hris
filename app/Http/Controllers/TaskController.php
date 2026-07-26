@@ -79,6 +79,6 @@ class TaskController extends Controller
 
         $this->taskService->updateStatus($id, $request->status);
 
-        return redirect()->back()->with('success', 'Status updated');
+        return redirect()->back()->with('success', 'Status Task updated');
     }
 }
