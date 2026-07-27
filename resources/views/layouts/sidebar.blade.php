@@ -75,8 +75,8 @@
                 </a>
             </li>
             <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
+                class="sidebar-item {{ request()->routeIs('attendances.*') ? 'active' : '' }}">
+                <a href="{{ route('attendances.index') }}" class='sidebar-link'>
                     <i class="bi bi-table"></i>
                     <span>Attendances</span>
                 </a>

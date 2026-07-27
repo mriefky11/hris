@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -21,6 +22,12 @@ Route::patch('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
 Route::resource('/employees', EmployeeController::class);
 Route::resource('/departments', DepartmentController::class);
 Route::resource('/roles', RoleController::class);
+Route::prefix('/attendances')->group(function () {
+    Route::get('/', [AttendanceController::class, 'index'])->name('attendances.index');
+    Route::get('/{id}', [AttendanceController::class, 'show'])->name('attendances.show');
+    Route::post('/check-in', [AttendanceController::class, 'checkIn'])->name('attendances.checkin');
+    Route::post('/check-out', [AttendanceController::class, 'checkOut'])->name('attendances.checkout');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -2,52 +2,44 @@
 
 namespace Database\Seeders;
 
+use App\Models\Employee;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class employees extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $faker = Faker::create();
 
-        DB::table('employees')->insert([
-            [
-                'fullname' => $faker->name,
+        for ($i = 0; $i < 5; $i++) {
+
+            // 1. buat user
+            $user = User::create([
+                'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('password'),
+            ]);
+
+            // 2. buat employee (link ke user)
+            Employee::create([
+                'user_id' => $user->id,
+                'fullname' => $user->name,
+                'email' => $user->email,
                 'phone_number' => $faker->phoneNumber,
                 'address' => $faker->address,
                 'birth_date' => $faker->dateTimeBetween('-40 years', '-20 years'),
-                'hire_date' => Carbon::now(),
-                'department_id' => 1,  // HR
-                'role_id' => 1,        // Manager
+                'hire_date' => now(),
+                'department_id' => rand(1, 2),
+                'role_id' => rand(1, 2),
                 'status' => 'active',
-                'salary' => $faker->randomFloat(2, 3000, 6000),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                'deleted_at' => null,
-            ],
-            [
-                'fullname' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'phone_number' => $faker->phoneNumber,
-                'address' => $faker->address,
-                'birth_date' => $faker->dateTimeBetween('-35 years', '-25 years'),
-                'hire_date' => Carbon::now(),
-                'department_id' => 2,  // IT
-                'role_id' => 2,        // Developer
-                'status' => 'active',
-                'salary' => $faker->randomFloat(2, 4000, 7000),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                'deleted_at' => null,
-            ],
-        ]);
+                'salary' => $faker->randomFloat(2, 3000, 7000),
+            ]);
+        }
     }
 }

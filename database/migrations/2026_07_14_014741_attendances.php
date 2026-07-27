@@ -13,13 +13,26 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained('employees');
-            $table->timestamp('check_in');
-            $table->timestamp('check_out')->nullable();
-            $table->date('date');
-            $table->string('status');
+
+            $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
+
+            $table->date('date')->index();
+
+            // CHECK IN
+            $table->timestamp('check_in_time')->nullable();
+            $table->decimal('check_in_lat', 10, 7)->nullable();
+            $table->decimal('check_in_lng', 10, 7)->nullable();
+            $table->string('check_in_photo')->nullable();
+
+            // CHECK OUT
+            $table->timestamp('check_out_time')->nullable();
+            $table->decimal('check_out_lat', 10, 7)->nullable();
+            $table->decimal('check_out_lng', 10, 7)->nullable();
+            $table->string('check_out_photo')->nullable();
+
+            $table->enum('status', ['present', 'late', 'absent'])->default('present');
+
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
