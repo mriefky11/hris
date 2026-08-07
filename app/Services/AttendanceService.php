@@ -19,24 +19,34 @@ class AttendanceService
         return $this->attendanceRepo->getByEmployee($employeeId);
     }
 
+    public function getAll()
+    {
+        return $this->attendanceRepo->getAll();
+    }
+
     public function checkIn($employeeId, $data)
     {
-        // cek sudah check-in hari ini
         $existing = $this->attendanceRepo->findToday($employeeId);
 
         if ($existing) {
-            throw new \Exception('Already checked in');
+            throw new \Exception('Anda sudah melakukan check-in hari ini.');
         }
 
-        $photoPath = $this->storePhoto($data['photo'], 'checkin');
+        $photoPath = ! empty($data['photo'])
+            ? $this->storePhoto($data['photo'], 'checkin')
+            : null;
+
+        $checkInTime = now();
+        $status = $checkInTime->format('H:i') > '09:00' ? 'late' : 'present';
 
         return $this->attendanceRepo->create([
             'employee_id' => $employeeId,
             'date' => today(),
-            'check_in_time' => now(),
+            'check_in_time' => $checkInTime,
             'check_in_lat' => $data['latitude'],
             'check_in_lng' => $data['longitude'],
             'check_in_photo' => $photoPath,
+            'status' => $status,
         ]);
     }
 
@@ -44,15 +54,17 @@ class AttendanceService
     {
         $attendance = $this->attendanceRepo->findToday($employeeId);
 
-        if (!$attendance) {
-            throw new \Exception('Belum check-in');
+        if (! $attendance) {
+            throw new \Exception('Anda belum melakukan check-in hari ini.');
         }
 
         if ($attendance->check_out_time) {
-            throw new \Exception('Already checked out');
+            throw new \Exception('Anda sudah melakukan check-out hari ini.');
         }
 
-        $photoPath = $this->storePhoto($data['photo'], 'checkout');
+        $photoPath = ! empty($data['photo'])
+            ? $this->storePhoto($data['photo'], 'checkout')
+            : null;
 
         return $this->attendanceRepo->update($attendance->id, [
             'check_out_time' => now(),
@@ -72,7 +84,7 @@ class AttendanceService
         $image = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
         $image = base64_decode($image);
 
-        $fileName = "attendance/{$type}-" . time() . ".png";
+        $fileName = "attendance/{$type}-".time().'.png';
 
         Storage::disk('public')->put($fileName, $image);
 

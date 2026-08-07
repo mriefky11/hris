@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\AttendanceService;
+use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
@@ -16,10 +16,16 @@ class AttendanceController extends Controller
 
     public function index()
     {
-        $employeeId = auth()->user()->employee->id;
+        $user = auth()->user();
 
-        $attendances = $this->attendanceService->getAllByEmployee($employeeId);
-        $todayAttendance = $this->attendanceService->getToday($employeeId);
+        if ($user->isAdmin()) {
+            $attendances = $this->attendanceService->getAll();
+            $todayAttendance = null;
+        } else {
+            $employeeId = $user->employee->id;
+            $attendances = $this->attendanceService->getAllByEmployee($employeeId);
+            $todayAttendance = $this->attendanceService->getToday($employeeId);
+        }
 
         return view('attendances.index', compact('attendances', 'todayAttendance'));
     }
@@ -29,14 +35,18 @@ class AttendanceController extends Controller
         $employeeId = auth()->user()->employee->id;
 
         $data = $request->validate([
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'photo' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'photo' => 'nullable|string',
         ]);
 
-        $this->attendanceService->checkIn($employeeId, $data);
+        try {
+            $this->attendanceService->checkIn($employeeId, $data);
 
-        return redirect()->back()->with('success', 'Check-in success');
+            return redirect()->back()->with('success', 'Check-in berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function checkOut(Request $request)
@@ -44,19 +54,28 @@ class AttendanceController extends Controller
         $employeeId = auth()->user()->employee->id;
 
         $data = $request->validate([
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'photo' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'photo' => 'nullable|string',
         ]);
 
-        $this->attendanceService->checkOut($employeeId, $data);
+        try {
+            $this->attendanceService->checkOut($employeeId, $data);
 
-        return redirect()->back()->with('success', 'Check-out success');
+            return redirect()->back()->with('success', 'Check-out berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function show($id)
     {
         $attendance = $this->attendanceService->findById($id);
+        $user = auth()->user();
+
+        if (! $user->isAdmin() && $user->employee?->id !== $attendance->employee_id) {
+            abort(403);
+        }
 
         return view('attendances.show', compact('attendance'));
     }

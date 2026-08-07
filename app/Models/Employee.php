@@ -18,6 +18,7 @@ class Employee extends Model
     ];
 
     protected $fillable = [
+        'user_id',
         'fullname',
         'email',
         'phone_number',
@@ -30,9 +31,34 @@ class Employee extends Model
         'salary',
     ];
 
-    public function task()
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
+
+    public function overtimes()
+    {
+        return $this->hasMany(Overtime::class);
+    }
+
+    public function payrolls()
+    {
+        return $this->hasMany(Payroll::class);
     }
 
     public function department()
@@ -43,10 +69,5 @@ class Employee extends Model
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }
-
-    public function employee()
-    {
-        return $this->hasOne(Employee::class);
     }
 }

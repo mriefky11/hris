@@ -6,6 +6,13 @@ use App\Models\Attendance;
 
 class AttendanceRepository
 {
+    public function getAll()
+    {
+        return Attendance::with('employee')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+    }
+
     public function getByEmployee($employeeId)
     {
         return Attendance::with('employee')
@@ -13,9 +20,10 @@ class AttendanceRepository
             ->orderBy('date', 'desc')
             ->paginate(10);
     }
+
     public function find($id)
     {
-        return Attendance::findOrFail($id);
+        return Attendance::with('employee')->findOrFail($id);
     }
 
     public function findToday($employeeId)
@@ -34,6 +42,7 @@ class AttendanceRepository
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->update($data);
+
         return $attendance;
     }
 }
