@@ -24,6 +24,7 @@ class StoreRequest extends FormRequest
             'role_id' => ['required', 'exists:roles,id'],
             'status' => ['required', 'string', 'in:active,inactive'],
             'salary' => ['required', 'numeric'],
+            'password' => ['nullable', 'string', 'min:8'],
         ];
     }
 }

@@ -2,7 +2,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
-                <a href="index.html">HRIS</a>
+                <a href="{{ route('dashboard') }}">HRIS</a>
             </div>
             <div class=" theme-toggle d-flex gap-2 align-items-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -46,61 +46,66 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item {{ request()->routeIs('tasks.*') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->routeIs('tasks.*') ? 'active' : '' }}">
                 <a href="{{ route('tasks.index') }}" class='sidebar-link'>
                     <i class="bi bi-check-circle-fill"></i>
                     <span>Tasks</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item {{ request()->routeIs('employees.*') ? 'active' : '' }}">
+
+            @if(auth()->user()->isAdmin())
+            <li class="sidebar-item {{ request()->routeIs('employees.*') ? 'active' : '' }}">
                 <a href="{{ route('employees.index') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                    <i class="bi bi-people-fill"></i>
                     <span>Employee</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item {{ request()->routeIs('departments.*') ? 'active' : '' }} ">
+            <li class="sidebar-item {{ request()->routeIs('departments.*') ? 'active' : '' }}">
                 <a href="{{ route('departments.index') }}" class='sidebar-link'>
                     <i class="bi bi-briefcase"></i>
                     <span>Departments</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                 <a href="{{ route('roles.index') }}" class='sidebar-link'>
                     <i class="bi bi-tag"></i>
                     <span>Roles</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
-                    <i class="bi bi-table"></i>
+            @endif
+
+            <li class="sidebar-item {{ request()->routeIs('attendances.*') ? 'active' : '' }}">
+                <a href="{{ route('attendances.index') }}" class='sidebar-link'>
+                    <i class="bi bi-clock-history"></i>
                     <span>Attendances</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
+            <li class="sidebar-item {{ request()->routeIs('payrolls.*') ? 'active' : '' }}">
+                <a href="{{ route('payrolls.index') }}" class='sidebar-link'>
                     <i class="bi bi-currency-dollar"></i>
                     <span>Payrolls</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
-                    <i class="bi bi-shift-fill"></i>
+            <li class="sidebar-item {{ request()->routeIs('leaves.*') ? 'active' : '' }}">
+                <a href="{{ route('leaves.index') }}" class='sidebar-link'>
+                    <i class="bi bi-calendar-x"></i>
                     <span>Leave Requests</span>
                 </a>
             </li>
-            <li
-                class="sidebar-item ">
-                <a href="index.html" class='sidebar-link'>
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
+            <li class="sidebar-item {{ request()->routeIs('overtimes.*') ? 'active' : '' }}">
+                <a href="{{ route('overtimes.index') }}" class='sidebar-link'>
+                    <i class="bi bi-hourglass-split"></i>
+                    <span>Overtime Requests</span>
                 </a>
+            </li>
+            <li class="sidebar-item">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="sidebar-link border-0 bg-transparent w-100 text-start">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </li>
         </ul>
     </div>
